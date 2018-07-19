@@ -16,12 +16,10 @@ class Poller
 {
 public:
     typedef std::vector<Channel*> ChannelList;
-    Poller(EventLoop *loop);
+    Poller();
     ~Poller();
     void updateChannel(Channel* channel);
     void poll(int timeout,ChannelList *activeChannels);
-private:
-    void fillActiveChannel( int numEvent, ChannelList *activeChannels ) const;
 private:
     typedef std::vector<struct pollfd> PollFdList;
     typedef std::map<int,Channel*> ChannelMap;
