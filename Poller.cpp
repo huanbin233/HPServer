@@ -6,7 +6,7 @@
  ************************************************************************/
 
 #include "Poller.h"
-
+#include "Channel.h"
 Poller::Poller()
 {
 }
@@ -15,16 +15,16 @@ Poller::~Poller()
 }
 void Poller::poll( int timeout, ChannelList *activeChannels )
 {
-    int numEvent = poll( pollfds_.data(), pollfds_.size(), timeout );
+    int numEvent = ::poll( pollfds_.data(), pollfds_.size(), timeout );
     if( numEvent > 0 )
     {
-        for( auto &pfd : pollfds )
+        for(PollFdList::const_iterator pfd = pollfds_.begin(); pfd!=pollfds_.end();pfd++)
         {
             if(numEvent <= 0) break;
             numEvent --;
             Channel *channel = channels_[pfd->fd];
             channel->set_revents(pfd->revents);
-            activeChannels.push_back(channel);
+            activeChannels->push_back(channel);
         }
     }
 }
@@ -36,12 +36,11 @@ void Poller::updateChannel(Channel* channel)
     {
         struct pollfd pfd;
         pfd.fd = channel->fd();
-        pfd.events = channle->events();
+        pfd.events = channel->events();
         pfd.revents = 0;
-
-        channels_[pfd.fd] = channel;
         pollfds_.push_back(pfd);
         channel->set_index(pollfds_.size()-1);
+        channels_[pfd.fd] = channel;
     }
     else
     {

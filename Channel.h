@@ -28,10 +28,11 @@ public:
     void set_events(short events){events_ = events;}
     void set_revents(short revents){revents_ = revents;}
 
-    int fd(){return fd;}
+    int fd(){return fd_;}
     short events(){return events_;}
+    int index(){return index_;}
 
-    void enableReading(){events_ |= ReadEvent;}
+    void enableReading(){events_ |= ReadEvent;update();}
     //
 private:
     void update();
@@ -41,7 +42,7 @@ private:
     static const int ReadEvent = POLLIN|POLLPRI ;
     static const int WriteEvent = POLLOUT;
 
-    EventLoop *loop;
+    EventLoop *loop_;
     int fd_;
     short events_;
     short revents_;
