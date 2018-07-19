@@ -10,9 +10,10 @@
 #include <vector>
 #include <map>
 #include <poll.h>
-#include "Channel.h"
 #include "EventLoop.h"
 #include <boost/noncopyable.hpp>
+class Channel;
+
 class Poller:public boost::noncopyable
 {
 public:

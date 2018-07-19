@@ -2,7 +2,9 @@
 #define _EVENTLOOP_H
 
 #include <boost/noncopyable.hpp>
-#include "Poller.h"
+class Channel;
+class Poller;
+
 class EventLoop:public boost::noncopyable
 {
 public:

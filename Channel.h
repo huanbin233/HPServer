@@ -7,9 +7,10 @@
 
 #ifndef _CHANNEL_H
 #define _CHANNEL_H
-#include "EventLoop.h"
 #include <boost/function.hpp>
 #include <boost/noncopyable.hpp>
+
+class EventLoop;
 class Channel:public boost::noncopyable
 {
     typedef boost::functional<void()> EventCallback;
