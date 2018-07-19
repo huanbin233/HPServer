@@ -9,11 +9,9 @@
 
 Poller::Poller()
 {
-
 }
 Poller::~Poller()
 {
-
 }
 void Poller::poll( int timeout, ChannelList *activeChannels )
 {
@@ -37,18 +35,19 @@ void Poller::updateChannel(Channel* channel)
     if(channel->index() < 0)
     {
         struct pollfd pfd;
-        pfd.fd = channel->fd;
-        pfd.events = channle->events;
+        pfd.fd = channel->fd();
+        pfd.events = channle->events();
         pfd.revents = 0;
 
         channels_[pfd.fd] = channel;
         pollfds_.push_back(pfd);
+        channel->set_index(pollfds_.size()-1);
     }
     else
     {
         //modtify
-        pollfds_[channel->index()].fd = channel.fd;
-        pollfds_[channel->index()].events = channel.events;
+        pollfds_[channel->index()].fd = channel->fd();
+        pollfds_[channel->index()].events = channel->events();
         pollfds_[channel->index()].revents = 0;
         
     }

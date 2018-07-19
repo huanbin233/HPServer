@@ -9,10 +9,11 @@
 #define _POLLER_H
 #include <vector>
 #include <map>
-#include <sys/poll.h>
+#include <poll.h>
 #include "Channel.h"
 #include "EventLoop.h"
-class Poller
+#include <boost::noncopyable.hpp>
+class Poller:public boost::noncopyable
 {
 public:
     typedef std::vector<Channel*> ChannelList;
