@@ -9,7 +9,7 @@
 #define _CHANNEL_H
 #include "EventLoop.h"
 #include <boost/function.hpp>
-#include <boost::noncopyable.hpp>
+#include <boost/noncopyable.hpp>
 class Channel:public boost::noncopyable
 {
     typedef boost::functional<void()> EventCallback;
@@ -28,7 +28,7 @@ public:
 
     void int fd(){return fd;}
     void short events(){return events_;}
-    
+
     void enableReading(){events_ |= ReadEvent;}
     //
 private:
