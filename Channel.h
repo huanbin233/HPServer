@@ -9,11 +9,12 @@
 #define _CHANNEL_H
 #include <boost/function.hpp>
 #include <boost/noncopyable.hpp>
+#include <poll.h>
 
 class EventLoop;
 class Channel:public boost::noncopyable
 {
-    typedef boost::functional<void()> EventCallback;
+    typedef boost::function<void()> EventCallback;
 public:
     Channel(EventLoop *loop, int fd);
     ~Channel();
@@ -27,8 +28,8 @@ public:
     void set_events(short events){events_ = events;}
     void set_revents(short revents){revents_ = revents;}
 
-    void int fd(){return fd;}
-    void short events(){return events_;}
+    int fd(){return fd;}
+    short events(){return events_;}
 
     void enableReading(){events_ |= ReadEvent;}
     //
