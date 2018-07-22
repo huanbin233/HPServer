@@ -1,31 +1,31 @@
 #include "Socket.h"
+#include "InetAddress.h"
 Socket::Socket()
+:sockfd_(::socket(PF_INET,SOCK_STREAM,0))
 {
-    sockfd_ = ::socket(PF_INET,SOCK_STREAM,0);
     assert(sockfd_ != -1);
+    fcntl(sockfd_,F_SETFL,O_NONBLOCK);
 }
 Socket::~Socket()
 {
     ::close(sockfd_);
 }
-void Socket::bindAddress(const string &ip,int port)
+void Socket::bindAddress(const InetAddress &localAddress)
 {
-    struct sockaddr_in adr;
-    bzero(&adr,sizeof(adr));   
-    adr.sin_family = AF_INET;
-    adr.sin_port = htons(port);
-    inet_pton(AF_INET,ip.c_str(),&adr.sin_addr);
-
-    assert(::bind(sockfd_,(struct sockaddr*)&localAddress,sizeof(localAddress)) != -1);
+    assert(::bind(sockfd_,localAddress.getSockAddr(),localAddress.getSockAddrLength()) != -1);
 }
 void Socket::listen()
 {
     assert(::listen(sockfd_,SOMAXCONN) != -1);
 }
-Socket Socket::accept()
+Socket Socket::accept(InetAddress *peerAddress)
 {
-    int connfd = accpet(sockfd_,nullptr,nullptr);
+    struct sockaddr_in adr;
+    socklen_t len;
+    const int connfd = ::accept4(sockfd_,(struct sockaddr*)&adr,&len,SOCK_NONBLOCK|SOCK_CLOEXEC);
     assert(connfd != -1);
+    if(peerAddress!=nullptr)
+        peerAddress = new InetAddress(adr);
     return Socket(connfd);
 }
 void Socket::shutdownWrite()

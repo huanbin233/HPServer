@@ -5,18 +5,26 @@
 #include <fcntl.h>
 #include <string.h>
 #include <stdio.h>
+#include <stdlib.h>
+#include <assert.h>
+#include <iostream>
+#include <netinet/in.h>
+#include <netinet/tcp.h>
+
+class InetAddress;
 //class InetAddress;
 //struct tcp_info;
-class Socket:public boost::noncopyable
+class Socket
 {
 public:
     explicit Socket(int sockfd):sockfd_(sockfd){};
+    Socket();
     ~Socket();
     int fd() const {return sockfd_;}
-    int accept(struct sockaddr_in *peerAddr);
+    Socket accept(InetAddress * peerAddress);
     void listen();
     void shutdownWrite();
-    void bindAddress(const struct sockaddr_in &localAddress);
+    void bindAddress(const InetAddress& localAddress);
 
     void setReuseAddr(bool on);
     void setReusePort(bool on);

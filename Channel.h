@@ -33,6 +33,15 @@ public:
     int index(){return index_;}
 
     void enableReading(){events_ |= ReadEvent;update();}
+    void enableWriting(){events_ |= WritEvent;update(); }
+
+    void disableReading(){events_ &= ~ReadEvent;update();}
+    void disableWriting(){events_ &= ~WriteEvent;update();}
+    void disableAll(){events_ = NoneEvent;update();}
+
+    bool isWriting() const {return events_ & WriteEvent;}
+    bool isReading() const {return events_ & ReadEvent;}
+
     //
 private:
     void update();
@@ -51,5 +60,6 @@ private:
     EventCallback readCallback_;
     EventCallback writeCallback_;
     EventCallback errorCallback_;
+    EventCallback closeCallback_;
 };
 #endif
